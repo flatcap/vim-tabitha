@@ -15,8 +15,6 @@ function! tab#NextWindow (...)
 	let l:forwards = (a:0 > 0) ? a:1 : 1
 	let l:wrap     = (a:0 > 1) ? a:2 : 1
 
-	echom printf ("%d,%d", l:forwards, l:wrap)
-
 	let l:win_num = winnr()
 
 	if (l:forwards)
@@ -42,8 +40,6 @@ function! tab#NextTab (...)
 	let l:forwards      = (a:0 > 0) ? a:1 : 1
 	let l:wrap          = (a:0 > 1) ? a:2 : 1
 	let l:select_window = (a:0 > 2) ? a:3 : 1
-
-	echom printf ("%d,%d,%d", l:forwards, l:wrap, l:select_window)
 
 	let l:tab_num = tabpagenr()
 
@@ -73,10 +69,10 @@ function! tab#TabSkip (...)
 	"	forwards (1) -- direction of change
 	let l:forwards = (a:0 > 0) ? a:1 : 1
 
-	echom printf ("%d", l:forwards)
-
 	if (g:tab_navigate_windows)
-		if (tab#NextWindow (l:forwards, 0)) "g:tab_wrap_around))
+		" Don't wrap windows if we're wrapping tabs
+		let l:wrap = (g:tab_navigate_tabs) ? 0 : g:tab_wrap_around
+		if (tab#NextWindow (l:forwards, l:wrap))
 			return 1
 		endif
 	endif
