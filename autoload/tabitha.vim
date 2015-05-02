@@ -1,14 +1,11 @@
-" Copyright 2014-2015 Richard Russon (flatcap)
-"
-" Switch to next Window or Tab
+" tabitha.vim - Switch between windows and tabs
+" Author:       Rich Russon (flatcap) <rich@flatcap.org>
+" Website:      https://flatcap.org
+" Copyright:    2014-2015 Richard Russon
+" License:      GPLv3 <http://fsf.org/>
+" Version:      1.0
 
-" Set some default values
-if (!exists ('g:tab_navigate_windows')) | let g:tab_navigate_windows = 1 | endif
-if (!exists ('g:tab_navigate_tabs'))    | let g:tab_navigate_tabs    = 1 | endif
-if (!exists ('g:tab_wrap_around'))      | let g:tab_wrap_around      = 1 | endif
-if (!exists ('g:tab_select_window'))    | let g:tab_select_window    = 1 | endif
-
-function! tab#NextWindow (...)
+function! tabitha#NextWindow (...)
 	" Parameters (default value)
 	"	forwards (1) -- direction of change
 	"	wrap     (1) -- wrap around at end of window/tab list
@@ -32,7 +29,7 @@ function! tab#NextWindow (...)
 	return 0
 endfunction
 
-function! tab#NextTab (...)
+function! tabitha#NextTab (...)
 	" Parameters (default value)
 	"	forwards      (1) -- direction of change
 	"	wrap          (1) -- wrap around at end of window/tab list
@@ -64,21 +61,21 @@ function! tab#NextTab (...)
 	return 0
 endfunction
 
-function! tab#TabSkip (...)
+function! tabitha#Switch (...)
 	" Parameters (default value)
 	"	forwards (1) -- direction of change
 	let l:forwards = (a:0 > 0) ? a:1 : 1
 
-	if (g:tab_navigate_windows)
+	if (g:tabitha_navigate_windows)
 		" Don't wrap windows if we're wrapping tabs
-		let l:wrap = (g:tab_navigate_tabs) ? 0 : g:tab_wrap_around
-		if (tab#NextWindow (l:forwards, l:wrap))
+		let l:wrap = (g:tabitha_navigate_tabs) ? 0 : g:tabitha_wrap_around
+		if (tabitha#NextWindow (l:forwards, l:wrap))
 			return 1
 		endif
 	endif
 
-	if (g:tab_navigate_tabs)
-		if (tab#NextTab (l:forwards, g:tab_wrap_around, g:tab_select_window))
+	if (g:tabitha_navigate_tabs)
+		if (tabitha#NextTab (l:forwards, g:tabitha_wrap_around, g:tabitha_select_window))
 			return 1
 		endif
 	endif
