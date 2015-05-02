@@ -5,6 +5,12 @@
 " License:      GPLv3 <http://fsf.org/>
 " Version:      1.0
 
+" Set some default values
+if (!exists ('g:tabitha_navigate_windows')) | let g:tabitha_navigate_windows = 1 | endif
+if (!exists ('g:tabitha_navigate_tabs'))    | let g:tabitha_navigate_tabs    = 1 | endif
+if (!exists ('g:tabitha_wrap_around'))      | let g:tabitha_wrap_around      = 1 | endif
+if (!exists ('g:tabitha_select_window'))    | let g:tabitha_select_window    = 1 | endif
+
 function! tabitha#NextWindow (...)
 	" Parameters (default value)
 	"	forwards (1) -- direction of change
