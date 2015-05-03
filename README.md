@@ -14,11 +14,10 @@ By pressing &lt;S-Tab&gt; the focus will be moved to the previous window, or tab
 
 The behaviour of Tabitha is controlled by four global variables:
 
-    g:tabitha_navigate_windows
-    g:tabitha_navigate_tabs
-    g:tabitha_wrap_around
-    g:tabitha_select_window
-
+    let g:tabitha_navigate_windows = 1
+    let g:tabitha_navigate_tabs    = 1
+    let g:tabitha_wrap_around      = 1
+    let g:tabitha_select_window    = 1
 
 ## Mappings
 
@@ -50,12 +49,32 @@ They are configured by four variables, described in 'Configuation', above.
 ### tabitha#NextWindow (...)
 
 NextWindow moves the cursor to the next/previous window.
+It takes two optional parameters which both default to 1 (true)
 
     NextWindow (forwards, wrap)
 
-It takes two optional parameters
+    forwards -- direction of change
+    wrap     -- wrap around at end of window/tab list
 
-    forwards - move the cursor forwards, right, or down.
+### tabitha#NextTab (...)
+
+NextTab moves the cursor to the next/previous tab.
+It takes three optional parameters which all default to 1 (true)
+
+    NextTab (forwards, wrap, select_window)
+
+    forwards      -- direction of change
+    wrap          -- wrap around at end of window/tab list
+    select_window -- when switching tabs, pick the first/last window
+
+### tabitha#Switch (...)
+
+NextTab moves the cursor to the next/previous tab.
+It takes one optional parameter which defaults to 1 (true)
+
+    Switch (forwards)
+
+    forwards -- direction of change (0 for backwards)
 
 ## Naming
 
@@ -65,7 +84,7 @@ The name 'Tabitha' is derived from an Aramaic word meaning gazelle.
 ## License
 
 Copyright &copy; Richard Russon (flatcap).
-Distributed under the GPLv3 &lt;http://fsf.org/&gt;
+Distributed under the GPLv3 <http://fsf.org/>
 
 ## See also
 

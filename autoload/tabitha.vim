@@ -39,7 +39,7 @@ function! tabitha#NextTab (...)
 	" Parameters (default value)
 	"	forwards      (1) -- direction of change
 	"	wrap          (1) -- wrap around at end of window/tab list
-	"	select_window (1) -- when swiching tabs, pick the first/last window
+	"	select_window (1) -- when switching tabs, pick the first/last window
 	let l:forwards      = (a:0 > 0) ? a:1 : 1
 	let l:wrap          = (a:0 > 1) ? a:2 : 1
 	let l:select_window = (a:0 > 2) ? a:3 : 1

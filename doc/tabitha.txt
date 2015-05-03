@@ -5,9 +5,88 @@ License: GPLv3 <http://fsf.org/>
 
 This plugin is only available if 'compatible' is not set.
 
-INTRODUCTION                                        	*tabitha*
+INTRODUCTION                                            *tabitha*
 
-ABOUT                                           	*tabitha-about*
+Tabitha helps you switch between windows and tabs.
+
+The plugin creates mappings to help you quickly navigate between windows and tabs.
+Pressing &lt;Tab&gt; in normal mode will move the focus to the next window.
+If there are no more windows, the next tab will be selected.
+
+By pressing &lt;S-Tab&gt; the focus will be moved to the previous window, or tab.
+
+CONFIGURATION                                         *tabitha-config*
+
+The behaviour of Tabitha is controlled by four global variables:
+
+    let g:tabitha_navigate_windows = 1
+    let g:tabitha_navigate_tabs    = 1
+    let g:tabitha_wrap_around      = 1
+    let g:tabitha_select_window    = 1
+
+MAPPINGS                                              *tabitha-mappings*
+
+By default, Tabitha will create two mappings:
+
+    <Tab>   Move forwards through windows
+    <S-Tab> Move backwards through windows
+
+These can be disabled by setting:
+
+    let g:tabitha_create_mappings = 0
+
+You can create your own mappings which call Tabitha, e.g.
+
+    nnoremap <silent> <F3> :call tabitha#Switch (1)<CR>
+    nnoremap <silent> <F4> :call tabitha#Switch (0)<CR>
+
+See the 'API' Section, below, for more details.
+
+API                                                   *tabitha-api*
+
+Tabitha introduces three functions to vim.
+They are configured by four variables, described in 'Configuation', above.
+
+    function! tabitha#NextWindow (...)
+    function! tabitha#NextTab (...)
+    function! tabitha#Switch (...)
+
+tabitha#NextWindow (...)                              *tabitha-next-window*
+
+NextWindow moves the cursor to the next/previous window.
+It takes two optional parameters which both default to 1 (true)
+
+    NextWindow (forwards, wrap)
+
+    forwards -- direction of change
+    wrap     -- wrap around at end of window/tab list
+
+tabitha#NextTab (...)                                 *tabitha-next-tab*
+
+NextTab moves the cursor to the next/previous tab.
+It takes three optional parameters which all default to 1 (true)
+
+    NextTab (forwards, wrap, select_window)
+
+    forwards      -- direction of change
+    wrap          -- wrap around at end of window/tab list
+    select_window -- when switching tabs, pick the first/last window
+
+tabitha#Switch (...)                                  *tabitha-switch*
+
+NextTab moves the cursor to the next/previous tab.
+It takes one optional parameter which defaults to 1 (true)
+
+    Switch (forwards)
+
+    forwards -- direction of change (0 for backwards)
+
+NAMING                                                *tabitha-naming*
+
+The plugin is whimsically named after the default key mapping.
+The name 'Tabitha' is derived from an Aramaic word meaning gazelle.
+
+ABOUT                                                 *tabitha-about*
 
 Grab the latest version or report a bug on GitHub:
 
