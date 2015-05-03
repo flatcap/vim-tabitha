@@ -46,35 +46,48 @@ They are configured by four variables, described in 'Configuation', above.
     function! tabitha#NextTab (...)
     function! tabitha#Switch (...)
 
-### tabitha#NextWindow (...)
+### NextWindow
 
 NextWindow moves the cursor to the next/previous window.
 It takes two optional parameters which both default to 1 (true)
 
-    NextWindow (forwards, wrap)
+    tabitha#NextWindow (forwards, wrap)
 
     forwards -- direction of change
-    wrap     -- wrap around at end of window/tab list
+    wrap     -- wrap around at end of window list
 
-### tabitha#NextTab (...)
+e.g.
+
+    call tabitha#NextWindow (1, 1)
+
+### NextTab
 
 NextTab moves the cursor to the next/previous tab.
 It takes three optional parameters which all default to 1 (true)
 
-    NextTab (forwards, wrap, select_window)
+    tabitha#NextTab (forwards, wrap, select_window)
 
     forwards      -- direction of change
-    wrap          -- wrap around at end of window/tab list
+    wrap          -- wrap around at end of tab list
     select_window -- when switching tabs, pick the first/last window
 
-### tabitha#Switch (...)
+e.g.
 
-NextTab moves the cursor to the next/previous tab.
+    call tabitha#NextTab (1, 0, 1)
+
+### Switch
+
+Switch moves the cursor to the next/previous window/tab
+(dependent on configuration).
 It takes one optional parameter which defaults to 1 (true)
 
-    Switch (forwards)
+    tabitha#Switch (forwards)
 
     forwards -- direction of change (0 for backwards)
+
+e.g.
+
+    call tabitha#Switch (1)
 
 ## Naming
 

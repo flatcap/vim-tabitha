@@ -12,9 +12,10 @@ if (!exists ('g:tabitha_wrap_around'))      | let g:tabitha_wrap_around      = 1
 if (!exists ('g:tabitha_select_window'))    | let g:tabitha_select_window    = 1 | endif
 
 function! tabitha#NextWindow (...)
+	" NextWindow moves the cursor to the next/previous window.
 	" Parameters (default value)
 	"	forwards (1) -- direction of change
-	"	wrap     (1) -- wrap around at end of window/tab list
+	"	wrap     (1) -- wrap around at end of window list
 	let l:forwards = (a:0 > 0) ? a:1 : 1
 	let l:wrap     = (a:0 > 1) ? a:2 : 1
 
@@ -36,9 +37,10 @@ function! tabitha#NextWindow (...)
 endfunction
 
 function! tabitha#NextTab (...)
+	" NextTab moves the cursor to the next/previous tab.
 	" Parameters (default value)
 	"	forwards      (1) -- direction of change
-	"	wrap          (1) -- wrap around at end of window/tab list
+	"	wrap          (1) -- wrap around at end of tab list
 	"	select_window (1) -- when switching tabs, pick the first/last window
 	let l:forwards      = (a:0 > 0) ? a:1 : 1
 	let l:wrap          = (a:0 > 1) ? a:2 : 1
@@ -68,6 +70,7 @@ function! tabitha#NextTab (...)
 endfunction
 
 function! tabitha#Switch (...)
+	" Switch moves the cursor to the next/previous window/tab
 	" Parameters (default value)
 	"	forwards (1) -- direction of change
 	let l:forwards = (a:0 > 0) ? a:1 : 1
