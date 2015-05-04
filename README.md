@@ -9,9 +9,9 @@ Pressing `<Tab>` in normal mode will move the focus to the next window.  If ther
 
 If there is only one window and one tab, then Tabitha will switch to the next file in the arglist.
 
-By pressing `<S-Tab>` the focus will be moved to the previous window, tab (or file).
+By pressing `<S-Tab>` the focus will be moved to the previous window, tab or file.
 
-The default mappings support a count.  Therefore pressing `3<Tab>` will move the focus forward three windows/tabs/files.
+The default mappings support a count.  Therefore pressing `3<Tab>` will move the focus forward three windows, tabs or files.
 
 ## Configuration
 
@@ -52,13 +52,15 @@ let g:tabitha_create_mappings = 0
 You can create your own mappings which call Tabitha, e.g.
 
 ```viml
+" Move focus forwards
 nnoremap <silent> <F3> :call tabitha#Switch (1)<CR>
+" Move focus backwards
 nnoremap <silent> <F4> :call tabitha#Switch (0)<CR>
 ```
 
 ## API
 
-Tabitha introduces four functions to vim.  Their behaviour is configured by five variables, described in 'Configuation', above.
+Tabitha introduces four functions to vim.  Their behaviour is configured by five variables, described in 'Configuration', above.
 
 ```viml
 function! tabitha#NextWindow (...)
@@ -85,6 +87,7 @@ tabitha#NextWindow (forwards, wrap)
 e.g.
 
 ```viml
+call tabitha#NextWindow ()
 call tabitha#NextWindow (1, 1)
 ```
 
@@ -107,7 +110,8 @@ tabitha#NextTab (forwards, wrap, select_window)
 e.g.
 
 ```viml
-call tabitha#NextTab (1, 0, 1)
+call tabitha#NextTab ()
+call tabitha#NextTab (1, 0, 0)
 ```
 
 ### NextFile
@@ -128,12 +132,13 @@ tabitha#NextFile (forwards, wrap)
 e.g.
 
 ```viml
+call tabitha#NextFile ()
 call tabitha#NextFile (1, 1)
 ```
 
 ### Switch
 
-Switch moves the cursor to the next/previous window/tab (dependent on configuration).
+Switch moves the cursor to the next/previous window/tab/file (dependent on configuration).
 It takes one optional parameter.
 It returns the number of times the focus moved, 0 if nothing changed.
 
@@ -148,6 +153,7 @@ tabitha#Switch (forwards)
 e.g.
 
 ```viml
+call tabitha#Switch ()
 call tabitha#Switch (1)
 ```
 
