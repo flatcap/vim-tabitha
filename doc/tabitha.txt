@@ -18,11 +18,11 @@ next window.  If there are no more windows, the next tab will be selected.
 If there is only one window and one tab, then Tabitha will switch to the next
 file in the arglist.
 
-By pressing "<S-Tab>" the focus will be moved to the previous window, tab (or
-file).
+By pressing "<S-Tab>" the focus will be moved to the previous window, tab or
+file.
 
 The default mappings support a count.  Therefore pressing "3<Tab>" will move
-the focus forward three windows/tabs/files.
+the focus forward three windows, tabs or files.
 
 ==============================================================================
 
@@ -66,7 +66,9 @@ These can be disabled by setting: >
 
 You can create your own mappings which call Tabitha, e.g. >
 
+  " Move focus forwards
   nnoremap <silent> <F3> :call tabitha#Switch (1)<CR>
+  " Move focus backwards
   nnoremap <silent> <F4> :call tabitha#Switch (0)<CR>
 
 See the 'API' Section, below, for more details.
@@ -98,6 +100,7 @@ It returns 1 if the focus was changed, 0 otherwise. >
 
 e.g. >
 
+  call tabitha#NextWindow ()
   call tabitha#NextWindow (1, 1)
 
 NEXTTAB                                               *tabitha-next-tab*
@@ -116,7 +119,8 @@ It returns 1 if the focus was changed, 0 otherwise. >
 
 e.g. >
 
-  call tabitha#NextTab (1, 0, 1)
+  call tabitha#NextTab ()
+  call tabitha#NextTab (1, 0, 0)
 
 NEXTFILE                                              *tabitha-next-file*
 
@@ -124,7 +128,7 @@ NextFile moves the cursor to the next/previous file.
 It takes two optional parameters.
 It returns 1 if the focus was changed, 0 otherwise. >
 
-  NextFile (forwards, wrap)
+  tabitha#NextFile (forwards, wrap)
 <
   Parameter | Default  | Description
   --------- | -------- | -------------------------------
@@ -133,6 +137,7 @@ It returns 1 if the focus was changed, 0 otherwise. >
 
 e.g. >
 
+  call tabitha#NextFile ()
   call tabitha#NextFile (1, 1)
 
 SWITCH                                                *tabitha-switch*
@@ -149,6 +154,7 @@ It returns the number of times the focus moved, 0 if nothing changed. >
 
 e.g. >
 
+  call tabitha#Switch ()
   call tabitha#Switch (1)
 
 ==============================================================================
