@@ -11,7 +11,19 @@ endif
 let g:loaded_tabitha = 1
 
 if (!exists('g:tabitha_create_mappings') || (g:tabitha_create_mappings == 1))
-	nnoremap <silent> <Tab>   :<C-U>call tabitha#Switch (1)<CR>
-	nnoremap <silent> <S-Tab> :<C-U>call tabitha#Switch (0)<CR>
+	nnoremap <silent> <Plug>TabithaNextWindow      :<C-u>call tabitha#NextWindow (1)<CR>
+	nnoremap <silent> <Plug>TabithaPreviousWindow  :<C-u>call tabitha#NextWindow (0)<CR>
+
+	nnoremap <silent> <Plug>TabithaNextTab         :<C-u>call tabitha#NextTab (1)<CR>
+	nnoremap <silent> <Plug>TabithaPreviousTab     :<C-u>call tabitha#NextTab (0)<CR>
+
+	nnoremap <silent> <Plug>TabithaNextFile        :<C-u>call tabitha#NextFile (1)<CR>
+	nnoremap <silent> <Plug>TabithaPreviousFile    :<C-u>call tabitha#NextFile (0)<CR>
+
+	nnoremap <silent> <Plug>TabithaSwitchForwards  :<C-u>call tabitha#Switch (1)<CR>
+	nnoremap <silent> <Plug>TabithaSwitchBackwards :<C-u>call tabitha#Switch (0)<CR>
+
+	nmap <silent> <Tab>   <Plug>TabithaSwitchForwards
+	nmap <silent> <S-Tab> <Plug>TabithaSwitchBackwards
 endif
 

@@ -97,7 +97,7 @@ function! tabitha#NextFile (...)
 	let l:forwards = (a:0 > 0) ? a:1 : 1
 	let l:wrap     = (a:0 > 1) ? a:2 : 1
 
-	" We number the Files from 1 .. n
+	" Files are numbered from 1 .. n
 	let l:file_num = argidx() + 1
 	let l:file_max = argc()
 
@@ -136,31 +136,31 @@ function! tabitha#Switch (...)
 	"	0 - Nothing happened
 	let l:forwards = (a:0 > 0) ? a:1 : 1
 
-	let l:t = (g:tabitha_navigate_tabs  && (tabpagenr('$') > 1))
-	let l:f = (g:tabitha_navigate_files && (argc()         > 1))
+	let l:tabs  = (g:tabitha_navigate_tabs  && (tabpagenr('$') > 1))
+	let l:files = (g:tabitha_navigate_files && (argc()         > 1))
 
-	let l:count = v:count ? v:count : 1
+	let l:count  = v:count ? v:count : 1
 	let l:result = 0
 
 	for l:i in range (1, l:count)
-		let l:w = (g:tabitha_navigate_windows && (winnr('$') > 1))
-		if (l:w)
+		let l:wins = (g:tabitha_navigate_windows && (winnr('$') > 1))
+		if (l:wins)
 			" Don't wrap windows if we're navigating tabs
-			let l:wrap = l:t ? 0 : g:tabitha_wrap_around
+			let l:wrap = l:tabs ? 0 : g:tabitha_wrap_around
 			if (tabitha#NextWindow (l:forwards, l:wrap))
 				let l:result += 1
 				continue
 			endif
 		endif
 
-		if (l:t)
+		if (l:tabs)
 			if (tabitha#NextTab (l:forwards, g:tabitha_wrap_around, g:tabitha_select_window))
 				let l:result += 1
 				continue
 			endif
 		endif
 
-		if (l:f && !l:w && !l:t)
+		if (l:files && !l:wins && !l:tabs)
 			" Special case of 1 window and 1 tab
 			if (tabitha#NextFile (l:forwards, g:tabitha_wrap_around))
 				let l:result += 1
