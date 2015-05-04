@@ -136,16 +136,14 @@ function! tabitha#Switch (...)
 	"	0 - Nothing happened
 	let l:forwards = (a:0 > 0) ? a:1 : 1
 
-	let l:w = (g:tabitha_navigate_windows && (winnr('$')     > 1))
-	let l:t = (g:tabitha_navigate_tabs    && (tabpagenr('$') > 1))
-	let l:f = (g:tabitha_navigate_files   && (argc()         > 1))
+	let l:t = (g:tabitha_navigate_tabs  && (tabpagenr('$') > 1))
+	let l:f = (g:tabitha_navigate_files && (argc()         > 1))
 
 	let l:count = v:count ? v:count : 1
-	echom printf ('v %d, l %d', v:count, l:count)
-
 	let l:result = 0
 
 	for l:i in range (1, l:count)
+		let l:w = (g:tabitha_navigate_windows && (winnr('$') > 1))
 		if (l:w)
 			" Don't wrap windows if we're navigating tabs
 			let l:wrap = l:t ? 0 : g:tabitha_wrap_around
