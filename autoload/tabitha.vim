@@ -8,7 +8,7 @@
 " Set some default values
 if (!exists ('g:tabitha_navigate_windows')) | let g:tabitha_navigate_windows = 1 | endif
 if (!exists ('g:tabitha_navigate_tabs'))    | let g:tabitha_navigate_tabs    = 1 | endif
-if (!exists ('g:tabitha_navigate_files'))    | let g:tabitha_navigate_files    = 1 | endif
+if (!exists ('g:tabitha_navigate_files'))   | let g:tabitha_navigate_files   = 1 | endif
 if (!exists ('g:tabitha_wrap_around'))      | let g:tabitha_wrap_around      = 1 | endif
 if (!exists ('g:tabitha_select_window'))    | let g:tabitha_select_window    = 1 | endif
 
@@ -17,13 +17,21 @@ function! tabitha#NextWindow (...)
 	" Parameters (default value)
 	"	forwards (1) -- direction of change
 	"	wrap     (1) -- wrap around at end of window list
+	" Returns
+	"	1 - Focus changed
+	"	0 - Nothing happened
 	let l:forwards = (a:0 > 0) ? a:1 : 1
 	let l:wrap     = (a:0 > 1) ? a:2 : 1
 
+	" Windows are numbered from 1 .. n
 	let l:win_num = winnr()
+	let l:win_max = winnr('$')
+
+	if (l:win_max == 1)
+		return 0
+	endif
 
 	if (l:forwards)
-		let l:win_max = winnr('$')
 		if (l:wrap || (l:win_num < l:win_max))
 			wincmd w
 			return 1
@@ -43,14 +51,22 @@ function! tabitha#NextTab (...)
 	"	forwards      (1) -- direction of change
 	"	wrap          (1) -- wrap around at end of tab list
 	"	select_window (1) -- when switching tabs, pick the first/last window
+	" Returns
+	"	1 - Focus changed
+	"	0 - Nothing happened
 	let l:forwards      = (a:0 > 0) ? a:1 : 1
 	let l:wrap          = (a:0 > 1) ? a:2 : 1
 	let l:select_window = (a:0 > 2) ? a:3 : 1
 
+	" Tabs are numbered from 1 .. n
 	let l:tab_num = tabpagenr()
+	let l:tab_max = tabpagenr('$')
+
+	if (l:tab_max == 1)
+		return 0
+	endif
 
 	if (l:forwards)
-		let l:tab_max = tabpagenr('$')
 		if (l:wrap || (l:tab_num < l:tab_max))
 			normal! gt
 			if (l:select_window)
@@ -75,13 +91,21 @@ function! tabitha#NextFile (...)
 	" Parameters (default value)
 	"	forwards (1) -- direction of change
 	"	wrap     (1) -- wrap around at end of tab list
+	" Returns
+	"	1 - Focus changed
+	"	0 - Nothing happened
 	let l:forwards = (a:0 > 0) ? a:1 : 1
 	let l:wrap     = (a:0 > 1) ? a:2 : 1
 
-	let l:file_num = argidx()
+	" We number the Files from 1 .. n
+	let l:file_num = argidx() + 1
+	let l:file_max = argc()
+
+	if (l:file_max == 1)
+		return 0
+	endif
 
 	if (l:forwards)
-		let l:file_max = argc() - 1
 		if (l:wrap || (l:file_num < l:file_max))
 			if (l:file_num == l:file_max)
 				execute 'rewind'
@@ -91,8 +115,8 @@ function! tabitha#NextFile (...)
 			return 1
 		endif
 	else
-		if (l:wrap || (l:file_num > 0))
-			if (l:file_num == 0)
+		if (l:wrap || (l:file_num > 1))
+			if (l:file_num == 1)
 				execute 'last'
 			else
 				execute 'previous'
@@ -107,25 +131,31 @@ function! tabitha#Switch (...)
 	" Switch moves the cursor to the next/previous window/tab/file
 	" Parameters (default value)
 	"	forwards (1) -- direction of change
+	" Returns
+	"	1 - Focus changed
+	"	0 - Nothing happened
 	let l:forwards = (a:0 > 0) ? a:1 : 1
 
-	if (g:tabitha_navigate_windows)
+	let l:w = (g:tabitha_navigate_windows && (winnr('$')     > 1))
+	let l:t = (g:tabitha_navigate_tabs    && (tabpagenr('$') > 1))
+	let l:f = (g:tabitha_navigate_files   && (argc()         > 1))
+
+	if (l:w)
 		" Don't wrap windows if we're navigating tabs
-		let l:wrap = (g:tabitha_navigate_tabs) ? 0 : g:tabitha_wrap_around
+		let l:wrap = l:t ? 0 : g:tabitha_wrap_around
 		if (tabitha#NextWindow (l:forwards, l:wrap))
 			return 1
 		endif
 	endif
 
-	if (g:tabitha_navigate_tabs)
-		" Don't wrap tabs if we're navigating files
-		let l:wrap = (g:tabitha_navigate_files) ? 0 : g:tabitha_wrap_around
-		if (tabitha#NextTab (l:forwards, l:wrap, g:tabitha_select_window))
+	if (l:t)
+		if (tabitha#NextTab (l:forwards, g:tabitha_wrap_around, g:tabitha_select_window))
 			return 1
 		endif
 	endif
 
-	if (g:tabitha_navigate_files)
+	if (l:f && !l:w && !l:t)
+		" Special case of 1 window and 1 tab
 		if (tabitha#NextFile (l:forwards, g:tabitha_wrap_around))
 			return 1
 		endif
