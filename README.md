@@ -15,7 +15,7 @@ The default mappings support a count.  Therefore pressing `3<Tab>` will move the
 
 ## Configuration
 
-The behaviour of Tabitha is controlled by four global variables:
+The behaviour of Tabitha is controlled by five global variables:
 
 ```viml
 let g:tabitha_navigate_windows = 1
@@ -58,7 +58,7 @@ nnoremap <silent> <F4> :call tabitha#Switch (0)<CR>
 
 ## API
 
-Tabitha introduces four functions to vim.  Their behaviour is configured by four variables, described in 'Configuation', above.
+Tabitha introduces four functions to vim.  Their behaviour is configured by five variables, described in 'Configuation', above.
 
 ```viml
 function! tabitha#NextWindow (...)

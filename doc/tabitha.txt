@@ -5,24 +5,53 @@ License: GPLv3 <http://fsf.org/>
 
 This plugin is only available if 'compatible' is not set.
 
+==============================================================================
+
 INTRODUCTION                                            *tabitha*
 
-Tabitha helps you switch between windows and tabs.
+Tabitha helps you switch between windows, tabs and files.
 
-The plugin creates mappings to help you quickly navigate between windows and tabs.
-Pressing &lt;Tab&gt; in normal mode will move the focus to the next window.
-If there are no more windows, the next tab will be selected.
+The plugin creates two mappings: "<Tab>" to move forwards and "<S-Tab>" to
+move backwards.  Pressing "<Tab>" in normal mode will move the focus to the
+next window.  If there are no more windows, the next tab will be selected.
 
-By pressing &lt;S-Tab&gt; the focus will be moved to the previous window, or tab.
+If there is only one window and one tab, then Tabitha will switch to the next
+file in the arglist.
+
+By pressing "<S-Tab>" the focus will be moved to the previous window, tab (or
+file).
+
+The default mappings support a count.  Therefore pressing "3<Tab>" will move
+the focus forward three windows/tabs/files.
+
+==============================================================================
 
 CONFIGURATION                                         *tabitha-config*
 
-The behaviour of Tabitha is controlled by four global variables:
+The behaviour of Tabitha is controlled by five global variables: >
 
   let g:tabitha_navigate_windows = 1
   let g:tabitha_navigate_tabs    = 1
+  let g:tabitha_navigate_files   = 1
   let g:tabitha_wrap_around      = 1
   let g:tabitha_select_window    = 1
+
+The default behaviour is to switch to the next window.  If there are no more
+windows, then the first window of the next tab will be selected.  When the
+final window of the final tab is reached, the focus will wrap around to the
+first window of the first tab.
+
+By choosing which variables to set, you can choose to cycle through:
+
+  * Just Windows
+  * Windows and Tabs
+  * Just Tabs
+  * Just Files
+
+When switching between tabs, the "select_window" option controls whether the
+focus should be set to the first window in that tab.
+
+==============================================================================
 
 MAPPINGS                                              *tabitha-mappings*
 
@@ -31,73 +60,105 @@ By default, Tabitha will create two mappings:
   <Tab>   Move forwards through windows
   <S-Tab> Move backwards through windows
 
-These can be disabled by setting:
+These can be disabled by setting: >
 
   let g:tabitha_create_mappings = 0
 
-You can create your own mappings which call Tabitha, e.g.
+You can create your own mappings which call Tabitha, e.g. >
 
   nnoremap <silent> <F3> :call tabitha#Switch (1)<CR>
   nnoremap <silent> <F4> :call tabitha#Switch (0)<CR>
 
 See the 'API' Section, below, for more details.
 
+==============================================================================
+
 API                                                   *tabitha-api*
 
-Tabitha introduces three functions to vim.
-They are configured by four variables, described in 'Configuation', above.
+Tabitha introduces four functions to vim.
+They are configured by five variables, described in 'Configuation', above. >
 
-  function tabitha#NextWindow (...)
-  function tabitha#NextTab (...)
-  function tabitha#Switch (...)
+  function! tabitha#NextWindow (...)
+  function! tabitha#NextTab (...)
+  function! tabitha#NextFile (...)
+  function! tabitha#Switch (...)
 
 NEXTWINDOW                                            *tabitha-next-window*
 
 NextWindow moves the cursor to the next/previous window.
-It takes two optional parameters which both default to 1 (true)
+It takes two optional parameters.
+It returns 1 if the focus was changed, 0 otherwise. >
 
   tabitha#NextWindow (forwards, wrap)
+<
+  Parameter | Default  | Description
+  --------- | -------- | ---------------------------------
+  forwards  | 1 (true) | direction of change
+  wrap      | 1 (true) | wrap around at end of window list
 
-  forwards -- direction of change
-  wrap     -- wrap around at end of window list
-
-e.g.
+e.g. >
 
   call tabitha#NextWindow (1, 1)
 
 NEXTTAB                                               *tabitha-next-tab*
 
 NextTab moves the cursor to the next/previous tab.
-It takes three optional parameters which all default to 1 (true)
+It takes three optional parameters.
+It returns 1 if the focus was changed, 0 otherwise. >
 
   tabitha#NextTab (forwards, wrap, select_window)
+<
+  Parameter     | Default  | Description
+  ------------- | -------- | -----------------------------------------------
+  forwards      | 1 (true) | direction of change
+  wrap          | 1 (true) | wrap around at end of tab list
+  select_window | 1 (true) | when switching tabs, pick the first/last window
 
-  forwards      -- direction of change
-  wrap          -- wrap around at end of tab list
-  select_window -- when switching tabs, pick the first/last window
-
-e.g.
+e.g. >
 
   call tabitha#NextTab (1, 0, 1)
 
+NEXTFILE                                              *tabitha-next-file*
+
+NextFile moves the cursor to the next/previous file.
+It takes two optional parameters.
+It returns 1 if the focus was changed, 0 otherwise. >
+
+  NextFile (forwards, wrap)
+<
+  Parameter | Default  | Description
+  --------- | -------- | -------------------------------
+  forwards  | 1 (true) | direction of change
+  wrap      | 1 (true) | wrap around at end of file list
+
+e.g. >
+
+  call tabitha#NextFile (1, 1)
+
 SWITCH                                                *tabitha-switch*
 
-Switch moves the cursor to the next/previous window/tab
-(dependent on configuration).
-It takes one optional parameter which defaults to 1 (true)
+Switch moves the cursor to the next/previous window/tab (dependent on configuration).
+It takes one optional parameter.
+It returns the number of times the focus moved, 0 if nothing changed. >
 
   tabitha#Switch (forwards)
+<
+  Parameter | Default  | Description
+  --------- | -------- | -------------------
+  forwards  | 1 (true) | direction of change
 
-  forwards -- direction of change (0 for backwards)
-
-e.g.
+e.g. >
 
   call tabitha#Switch (1)
+
+==============================================================================
 
 NAMING                                                *tabitha-naming*
 
 The plugin is whimsically named after the default key mapping.
 The name 'Tabitha' is derived from an Aramaic word meaning gazelle.
+
+==============================================================================
 
 ABOUT                                                 *tabitha-about*
 
