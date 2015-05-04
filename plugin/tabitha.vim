@@ -11,7 +11,7 @@ endif
 let g:loaded_tabitha = 1
 
 if (!exists('g:tabitha_create_mappings') || (g:tabitha_create_mappings == 1))
-	nnoremap <silent> <Tab>   :call tabitha#Switch (1)<CR>
-	nnoremap <silent> <S-Tab> :call tabitha#Switch (0)<CR>
+	nnoremap <silent> <Tab>   :<C-U>call tabitha#Switch (1)<CR>
+	nnoremap <silent> <S-Tab> :<C-U>call tabitha#Switch (0)<CR>
 endif
 

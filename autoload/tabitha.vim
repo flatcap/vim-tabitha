@@ -132,7 +132,7 @@ function! tabitha#Switch (...)
 	" Parameters (default value)
 	"	forwards (1) -- direction of change
 	" Returns
-	"	1 - Focus changed
+	"	n - Focus changed n times
 	"	0 - Nothing happened
 	let l:forwards = (a:0 > 0) ? a:1 : 1
 
@@ -140,27 +140,37 @@ function! tabitha#Switch (...)
 	let l:t = (g:tabitha_navigate_tabs    && (tabpagenr('$') > 1))
 	let l:f = (g:tabitha_navigate_files   && (argc()         > 1))
 
-	if (l:w)
-		" Don't wrap windows if we're navigating tabs
-		let l:wrap = l:t ? 0 : g:tabitha_wrap_around
-		if (tabitha#NextWindow (l:forwards, l:wrap))
-			return 1
-		endif
-	endif
+	let l:count = v:count ? v:count : 1
+	echom printf ('v %d, l %d', v:count, l:count)
 
-	if (l:t)
-		if (tabitha#NextTab (l:forwards, g:tabitha_wrap_around, g:tabitha_select_window))
-			return 1
-		endif
-	endif
+	let l:result = 0
 
-	if (l:f && !l:w && !l:t)
-		" Special case of 1 window and 1 tab
-		if (tabitha#NextFile (l:forwards, g:tabitha_wrap_around))
-			return 1
+	for l:i in range (1, l:count)
+		if (l:w)
+			" Don't wrap windows if we're navigating tabs
+			let l:wrap = l:t ? 0 : g:tabitha_wrap_around
+			if (tabitha#NextWindow (l:forwards, l:wrap))
+				let l:result += 1
+				continue
+			endif
 		endif
-	endif
 
-	return 0
+		if (l:t)
+			if (tabitha#NextTab (l:forwards, g:tabitha_wrap_around, g:tabitha_select_window))
+				let l:result += 1
+				continue
+			endif
+		endif
+
+		if (l:f && !l:w && !l:t)
+			" Special case of 1 window and 1 tab
+			if (tabitha#NextFile (l:forwards, g:tabitha_wrap_around))
+				let l:result += 1
+				continue
+			endif
+		endif
+	endfor
+
+	return l:result
 endfunction
 
