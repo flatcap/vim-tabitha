@@ -38,10 +38,22 @@ When switching between tabs, the `select_window` option controls whether the foc
 
 ## Mappings
 
-By default, Tabitha will create two mappings:
+By default, Tabitha will create two key mappings and eight plugin mappings:
 
-    <Tab>   Move forwards through windows
-    <S-Tab> Move backwards through windows
+    <Tab>   Move forwards through windows/tabs
+    <S-Tab> Move backwards through windows/tabs
+
+    <Plug>TabithaNextWindow
+    <Plug>TabithaPreviousWindow
+
+    <Plug>TabithaNextTab
+    <Plug>TabithaPreviousTab
+
+    <Plug>TabithaNextFile
+    <Plug>TabithaPreviousFile
+
+    <Plug>TabithaSwitchForwards
+    <Plug>TabithaSwitchBackwards
 
 These can be disabled by setting:
 
@@ -49,13 +61,24 @@ These can be disabled by setting:
 let g:tabitha_create_mappings = 0
 ```
 
-You can create your own mappings which call Tabitha, e.g.
+You can create your own Tabitha mappings, e.g.
 
 ```viml
 " Move focus forwards
-nnoremap <silent> <F3> :call tabitha#Switch (1)<CR>
+nmap <silent> <F3> <Plug>TabithaSwitchForwards
+nmap <silent> <F3> :<C-u>call tabitha#Switch (1)<CR>
+
 " Move focus backwards
-nnoremap <silent> <F4> :call tabitha#Switch (0)<CR>
+nmap <silent> <F4> <Plug>TabithaSwitchBackwards
+nmap <silent> <F4> :<C-u>call tabitha#Switch (0)<CR>
+
+" Select next tab
+nmap <silent> <Leader>t <Plug>TabithaNextTab
+nmap <silent> <Leader>t :<C-u>call tabitha#NextTab (1, 0, 0)<CR>
+
+" Select previous file
+nmap <silent> <Leader>F <Plug>TabithaPreviousFile
+nmap <silent> <Leader>F :<C-u>call tabitha#NextFile (0, 0)<CR>
 ```
 
 ## API
