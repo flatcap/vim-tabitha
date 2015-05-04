@@ -8,6 +8,7 @@
 " Set some default values
 if (!exists ('g:tabitha_navigate_windows')) | let g:tabitha_navigate_windows = 1 | endif
 if (!exists ('g:tabitha_navigate_tabs'))    | let g:tabitha_navigate_tabs    = 1 | endif
+if (!exists ('g:tabitha_navigate_files'))    | let g:tabitha_navigate_files    = 1 | endif
 if (!exists ('g:tabitha_wrap_around'))      | let g:tabitha_wrap_around      = 1 | endif
 if (!exists ('g:tabitha_select_window'))    | let g:tabitha_select_window    = 1 | endif
 
@@ -69,14 +70,47 @@ function! tabitha#NextTab (...)
 	return 0
 endfunction
 
+function! tabitha#NextFile (...)
+	" NextFile moves the cursor to the next/previous file.
+	" Parameters (default value)
+	"	forwards (1) -- direction of change
+	"	wrap     (1) -- wrap around at end of tab list
+	let l:forwards = (a:0 > 0) ? a:1 : 1
+	let l:wrap     = (a:0 > 1) ? a:2 : 1
+
+	let l:file_num = argidx()
+
+	if (l:forwards)
+		let l:file_max = argc() - 1
+		if (l:wrap || (l:file_num < l:file_max))
+			if (l:file_num == l:file_max)
+				execute 'rewind'
+			else
+				execute 'next'
+			endif
+			return 1
+		endif
+	else
+		if (l:wrap || (l:file_num > 0))
+			if (l:file_num == 0)
+				execute 'last'
+			else
+				execute 'previous'
+			endif
+			return 1
+		endif
+	endif
+	return 0
+endfunction
+
 function! tabitha#Switch (...)
-	" Switch moves the cursor to the next/previous window/tab
+	" Switch moves the cursor to the next/previous window/tab/file
 	" Parameters (default value)
 	"	forwards (1) -- direction of change
 	let l:forwards = (a:0 > 0) ? a:1 : 1
 
 	if (g:tabitha_navigate_windows)
-		" Don't wrap windows if we're wrapping tabs
+		" Don't wrap windows if we're navigating tabs
 		let l:wrap = (g:tabitha_navigate_tabs) ? 0 : g:tabitha_wrap_around
 		if (tabitha#NextWindow (l:forwards, l:wrap))
 			return 1
@@ -84,12 +118,19 @@ function! tabitha#Switch (...)
 	endif
 
 	if (g:tabitha_navigate_tabs)
-		if (tabitha#NextTab (l:forwards, g:tabitha_wrap_around, g:tabitha_select_window))
+		" Don't wrap tabs if we're navigating files
+		let l:wrap = (g:tabitha_navigate_files) ? 0 : g:tabitha_wrap_around
+		if (tabitha#NextTab (l:forwards, l:wrap, g:tabitha_select_window))
+			return 1
+		endif
+	endif
+
+	if (g:tabitha_navigate_files)
+		if (tabitha#NextFile (l:forwards, g:tabitha_wrap_around))
 			return 1
 		endif
 	endif
 
 	return 0
 endfunction
-
 
