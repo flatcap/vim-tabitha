@@ -139,7 +139,7 @@ function! tabitha#Switch (...)
 	let l:tabs  = (g:tabitha_navigate_tabs  && (tabpagenr('$') > 1))
 	let l:files = (g:tabitha_navigate_files && (argc()         > 1))
 
-	let l:count  = v:count ? v:count : 1
+	let l:count  = v:count1
 	let l:result = 0
 
 	for l:i in range (1, l:count)
