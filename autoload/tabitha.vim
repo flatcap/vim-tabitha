@@ -6,11 +6,11 @@
 " Version:      1.0
 
 " Set some default values
-if (!exists ('g:tabitha_navigate_windows')) | let g:tabitha_navigate_windows = 1 | endif
-if (!exists ('g:tabitha_navigate_tabs'))    | let g:tabitha_navigate_tabs    = 1 | endif
-if (!exists ('g:tabitha_navigate_files'))   | let g:tabitha_navigate_files   = 1 | endif
-if (!exists ('g:tabitha_wrap_around'))      | let g:tabitha_wrap_around      = 1 | endif
-if (!exists ('g:tabitha_select_window'))    | let g:tabitha_select_window    = 1 | endif
+let g:tabitha_navigate_windows = get (g:, 'tabitha_navigate_windows', 1)
+let g:tabitha_navigate_tabs    = get (g:, 'tabitha_navigate_tabs',    1)
+let g:tabitha_navigate_files   = get (g:, 'tabitha_navigate_files',   1)
+let g:tabitha_wrap_around      = get (g:, 'tabitha_wrap_around',      1)
+let g:tabitha_select_window    = get (g:, 'tabitha_select_window',    1)
 
 function! tabitha#NextWindow (...)
 	" NextWindow moves the cursor to the next/previous window.
@@ -25,7 +25,7 @@ function! tabitha#NextWindow (...)
 
 	" Windows are numbered from 1 .. n
 	let l:win_num = winnr()
-	let l:win_max = winnr('$')
+	let l:win_max = winnr ('$')
 
 	if (l:win_max == 1)
 		return 0
@@ -60,7 +60,7 @@ function! tabitha#NextTab (...)
 
 	" Tabs are numbered from 1 .. n
 	let l:tab_num = tabpagenr()
-	let l:tab_max = tabpagenr('$')
+	let l:tab_max = tabpagenr ('$')
 
 	if (l:tab_max == 1)
 		return 0
@@ -136,14 +136,14 @@ function! tabitha#Switch (...)
 	"	0 - Nothing happened
 	let l:forwards = (a:0 > 0) ? a:1 : 1
 
-	let l:tabs  = (g:tabitha_navigate_tabs  && (tabpagenr('$') > 1))
-	let l:files = (g:tabitha_navigate_files && (argc()         > 1))
+	let l:tabs  = (g:tabitha_navigate_tabs  && (tabpagenr ('$') > 1))
+	let l:files = (g:tabitha_navigate_files && (argc()          > 1))
 
 	let l:count  = v:count1
 	let l:result = 0
 
 	for l:i in range (1, l:count)
-		let l:wins = (g:tabitha_navigate_windows && (winnr('$') > 1))
+		let l:wins = (g:tabitha_navigate_windows && (winnr ('$') > 1))
 		if (l:wins)
 			" Don't wrap windows if we're navigating tabs
 			let l:wrap = l:tabs ? 0 : g:tabitha_wrap_around
